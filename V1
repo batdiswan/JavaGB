@@ -1,0 +1,94 @@
+// Основной абстрактный класс для геометрических фигур
+abstract class Shape {
+    // Метод для вычисления площади
+    abstract double calculateArea();
+    
+    // Метод для вычисления периметра
+    abstract double calculatePerimeter();
+}
+
+// Класс для круга
+class Circle extends Shape {
+    private double radius;
+
+    // Конструктор
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    // Переопределение метода для вычисления площади
+    @Override
+    double calculateArea() {
+        return Math.PI * radius * radius;
+    }
+
+    // Переопределение метода для вычисления периметра
+    @Override
+    double calculatePerimeter() {
+        return 2 * Math.PI * radius;
+    }
+}
+
+// Класс для прямоугольника
+class Rectangle extends Shape {
+    private double length;
+    private double width;
+
+    // Конструктор
+    public Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+
+    // Переопределение метода для вычисления площади
+    @Override
+    double calculateArea() {
+        return length * width;
+    }
+
+    // Переопределение метода для вычисления периметра
+    @Override
+    double calculatePerimeter() {
+        return 2 * (length + width);
+    }
+}
+
+
+class Square extends Rectangle {
+    private double side;
+
+
+    public Square(double side) {
+        super(side, side);
+        this.side = side;
+    }
+
+ 
+    @Override
+    double calculateArea() {
+        return side * side;
+    }
+
+
+    @Override
+    double calculatePerimeter() {
+        return 4 * side;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Circle circle = new Circle(5);
+        System.out.println("Площадь круга: " + circle.calculateArea());
+        System.out.println("Периметр круга: " + circle.calculatePerimeter());
+
+        Rectangle rectangle = new Rectangle(4, 6);
+        System.out.println("Площадь прямоугольника: " + rectangle.calculateArea());
+        System.out.println("Периметр прямоугольника: " + rectangle.calculatePerimeter());
+
+        Square square = new Square(5);
+        System.out.println("Площадь квадрата: " + square.calculateArea());
+        System.out.println("Периметр квадрата: " + square.calculatePerimeter());
+    }
+}
