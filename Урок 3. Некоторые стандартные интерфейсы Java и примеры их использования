@@ -1,0 +1,141 @@
+public class MyLinkedList<T> implements Iterable<T> {
+
+    private Node<T> head;
+    private Node<T> tail;
+
+    public void add(T value) {
+        Node<T> newNode = new Node<>(value);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+    }
+
+    public T get(int index) {
+        Node<T> current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current.value;
+    }
+
+    public void remove(int index) {
+        if (index == 0) {
+            head = head.next;
+            if (head == null) {
+                tail = null;
+            }
+        } else {
+            Node<T> previous = head;
+            for (int i = 0; i < index - 1; i++) {
+                previous = previous.next;
+            }
+            Node<T> toRemove = previous.next;
+            previous.next = toRemove.next;
+            if (toRemove == tail) {
+                tail = previous;
+            }
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new MyLinkedListIterator<>(head);
+    }
+
+    private static class Node<T> {
+
+        T value;
+        Node<T> next;
+
+        public Node(T value) {
+            this.value = value;
+        }
+    }
+
+    private static class MyLinkedListIterator<T> implements Iterator<T> {
+
+        private Node<T> current;
+
+        public MyLinkedListIterator(Node<T> head) {
+            this.current = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public T next() {
+            T value = current.value;
+            current = current.next;
+            return value;
+        }
+    }
+}
+public class Main {
+
+    public static void main(String[] args) {
+        MyLinkedList<String> list = new MyLinkedList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+
+        for (String element : list) {
+            System.out.println(element);
+        }
+
+        System.out.println(list.get(1));
+        list.remove(1);
+
+        for (String element : list) {
+            System.out.println(element);
+        }
+    }
+}
+public class Employee implements Comparable<Employee> {
+
+    private String name;
+    private int age;
+    private int salary;
+
+    public Employee(String name, int age, int salary) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    @Override
+    public int compareTo(Employee other) {
+        return this.age - other.age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+}
+public class EmployeeSalaryComparator implements Comparator<Employee> {
+
+    @Override
+    public int compare(Employee o1, Employee o2) {
+        return o1.getSalary() - o2.getSalary();
+    }
+}
+public class Main {
+
+    public static void main(String[] args) {
+        Employee[] employees = new Employee[] {
+            new Employee("Jerry", 30, 100000),
+            new Employee("Jany", 25, 80000),
+            new Employee("Mikita
