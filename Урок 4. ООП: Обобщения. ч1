@@ -1,0 +1,120 @@
+public class Pair<T, U> {
+
+    private T first;
+    private U second;
+
+    public Pair(T first, U second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    public T getFirst() {
+        return first;
+    }
+
+    public void setFirst(T first) {
+        this.first = first;
+    }
+
+    public U getSecond() {
+        return second;
+    }
+
+    public void setSecond(U second) {
+        this.second = second;
+    }
+
+    @Override
+    public String toString() {
+        return "Pair{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
+    }
+}
+public class Main {
+
+    public static void main(String[] args) {
+        Pair<Integer, String> pair = new Pair<>(10, "Hello");
+        System.out.println(pair);
+        System.out.println("First element: " + pair.getFirst());
+        System.out.println("Second element: " + pair.getSecond());
+        pair.setFirst(20);
+        pair.setSecond("World");
+        System.out.println(pair);
+        System.out.println("Updated first element: " + pair.getFirst());
+        System.out.println("Updated second element: " + pair.getSecond());
+    }
+}
+public class DataContainer<T> {
+
+    private T[] data;
+    private int size;
+
+    public DataContainer() {
+        this.data = (T[]) new Object[10];
+        this.size = 0;
+    }
+
+    public void add(T item) {
+        if (size == data.length) {
+            expandCapacity();
+        }
+        data[size++] = item;
+    }
+
+    public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return data[index];
+    }
+
+    public void remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        for (int i = index; i < size - 1; i++) {
+            data[i] = data[i + 1];
+        }
+        size--;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    private void expandCapacity() {
+        T[] newData = (T[]) new Object[data.length * 2];
+        System.arraycopy(data, 0, newData, 0, data.length);
+        data = newData;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(data[i]);
+            if (i < size - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}
+public class Main {
+
+    public static void main(String[] args) {
+        DataContainer<String> stringContainer = new DataContainer<>();
+        stringContainer.add("Apple");
+        stringContainer.add("Banana");
+        stringContainer.add("Orange");
+        System.out.println(stringContainer);
+        String fruit = stringContainer.get(1);
+        System.out.println("Fruit at index 1: " + fruit);
+        stringContainer.remove(1);
+        System.out.println(stringContainer);
+        System.out.println("Size of container: " + stringContainer.getSize());
+    }
+}
