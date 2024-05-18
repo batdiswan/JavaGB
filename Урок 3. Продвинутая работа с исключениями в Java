@@ -1,0 +1,123 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Person {
+    private String lastName;
+    private String firstName;
+    private String middleName;
+    private String birthDate;
+    private String phoneNumber;
+    private char gender;
+
+    public Person(String lastName, String firstName, String middleName, String birthDate, String phoneNumber, char gender) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public char getGender() {
+        return gender;
+    }
+
+    @Override
+    public String toString() {
+        return lastName + " " + firstName + " " + middleName + " " + birthDate + " " + phoneNumber + " " + gender;
+    }
+}
+
+public class PersonalDataProcessor {
+    private static final int EXPECTED_FIELDS = 6;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter personal data (Last Name First Name Middle Name Birth Date Phone Number Gender):");
+        String input = scanner.nextLine();
+
+        String[] data = input.split("\\s+");
+        if (data.length != EXPECTED_FIELDS) {
+            System.out.println("Error: Incorrect number of fields entered.");
+            return;
+        }
+
+        try {
+            String lastName = data[0];
+            String firstName = data[1];
+            String middleName = data[2];
+            String birthDate = validateBirthDate(data[3]);
+            String phoneNumber = validatePhoneNumber(data[4]);
+            char gender = validateGender(data[5]);
+
+            Person person = new Person(lastName, firstName, middleName, birthDate, phoneNumber, gender);
+            writeToFile(person);
+            System.out.println("Data successfully processed and written to file.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static String validateBirthDate(String birthDateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(birthDateStr);
+            return birthDateStr;
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid birth date format. Please use format dd.mm.yyyy.");
+        }
+    }
+
+    private static String validatePhoneNumber(String phoneNumberStr) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(phoneNumberStr);
+        if (matcher.matches()) {
+            return phoneNumberStr;
+        } else {
+            throw new IllegalArgumentException("Invalid phone number format. Please enter a valid unsigned integer.");
+        }
+    }
+
+    private static char validateGender(String genderStr) {
+        if (genderStr.equalsIgnoreCase("m") || genderStr.equalsIgnoreCase("f")) {
+            return genderStr.charAt(0);
+        } else {
+            throw new IllegalArgumentException("Invalid gender. Please enter 'm' for male or 'f' for female.");
+        }
+    }
+
+    private static void writeToFile(Person person) {
+        try (FileWriter writer = new FileWriter(person.getLastName() + ".txt", true)) {
+            writer.write(person.toString() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
